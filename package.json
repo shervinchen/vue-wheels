@@ -1,0 +1,48 @@
+{
+  "name": "vue-wheels",
+  "version": "1.0.0",
+  "description": "some wheels made by vue",
+  "main": "dist/vue-wheels.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/csdoker/vue-wheels.git"
+  },
+  "keywords": [
+    "vue",
+    "wheels",
+    "javascript",
+    "es6"
+  ],
+  "author": "csdoker",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/csdoker/vue-wheels/issues"
+  },
+  "homepage": "https://github.com/csdoker/vue-wheels#readme",
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "cross-env": "^5.2.0",
+    "css-loader": "^1.0.0",
+    "file-loader": "^1.1.11",
+    "node-sass": "^4.9.2",
+    "sass-loader": "^7.0.3",
+    "vue": "^2.5.16",
+    "vue-loader": "^15.2.6",
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^4.16.3",
+    "webpack-dev-server": "^3.1.5"
+  }
+}
