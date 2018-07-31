@@ -1,12 +1,8 @@
 <template>
   <div id="app">
-    <button @click="showAreaSelect">点我</button>
-    <vue-area-select :isShow="isShow"
-                     :font-size="size"
-                     active-color="green"
-                     :line-height="height"
-                     @fade="toggle"
-                     @selectdone="alertData"></vue-area-select>
+    <div class="main">
+      <vue-wheels-pagination @pageChange="change" :pageOption="pageOption"></vue-wheels-pagination>
+    </div>
   </div>
 </template>
 
@@ -15,24 +11,35 @@ export default {
   name: 'app',
   data () {
     return {
-      isShow : false,
-      size:18,
-      height:36
+      pageOption: {
+        curr: 1,
+        count: 162,
+        limit: 5,
+        ellipsis: true,
+        max: 2
+      }
     }
   },
   methods: {
-    showAreaSelect () {
-      this.toggle()
-    },
-    toggle () {
-      this.isShow = !this.isShow
-    },
-    alertData (data) {
-      alert(JSON.stringify(data))
+    change (pageNumber) {
+      console.log(pageNumber)
     }
+  },
+  mounted () {
+    // 显示省略号
+    // new Pagination('#pagelist1', );
   }
 }
 </script>
 
 <style lang="scss">
+  @import '../../style/base.scss';
+  
+  .main {
+    margin-top: 300px;
+    text-align: center;
+    .content {
+      text-align: center;
+    }
+  }
 </style>

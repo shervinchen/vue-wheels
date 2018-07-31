@@ -1,12 +1,17 @@
 const path = require('path');
 const webpack = require('webpack')
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   // 模式配置
   mode: 'development',
   // 入口文件
   entry: {
-    pagination: './src/index.js'
+    // 测试入口
+    pagination: './src/pagination/main.js'
+    // 发布入口
+    // pagination: './src/pagination/index.js'
   },
   // 出口文件
   output: {
@@ -18,7 +23,9 @@ module.exports = {
     library: 'vue-wheels'
   },
   // 对应的插件
-  plugins: [],
+  plugins: [
+    new VueLoaderPlugin()
+  ],
   // 开发服务器配置
   devServer: {},
   // 处理对应模块
@@ -97,7 +104,22 @@ module.exports = {
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map'
+  devtool: '#eval-source-map',
+  optimization: {
+    minimizer: [
+      // we specify a custom UglifyJsPlugin here to get source maps in production
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        uglifyOptions: {
+          compress: false,
+          ecma: 6,
+          mangle: true
+        },
+        sourceMap: true
+      })
+    ]
+  }
 }
 
 if (process.env.NODE_ENV === 'production') {
@@ -109,12 +131,12 @@ if (process.env.NODE_ENV === 'production') {
         NODE_ENV: '"production"'
       }
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false
-      }
-    }),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   sourceMap: true,
+    //   compress: {
+    //     warnings: false
+    //   }
+    // }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
     })
