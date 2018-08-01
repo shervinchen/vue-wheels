@@ -1,13 +1,13 @@
-import vueWheelsPagination from './components/vue-wheels-pagination'
+import Pagination from './components/vue-wheels-pagination'
 
-const Pagination = {
+const VueWheelsPagination = {
   install (Vue, options) {
-    Vue.component(vueWheelsPagination.name, vueWheelsPagination)
+    Vue.component(Pagination.name, Pagination)
   }
 }
 
 if (typeof window !== 'undefined' && window.Vue) {
-  window.Vue.use(Pagination)
+  window.Vue.use(VueWheelsPagination)
 }
 
-export default { Pagination }
+export { VueWheelsPagination }

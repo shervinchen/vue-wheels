@@ -1,10 +1,10 @@
 <template lang="html">
   <nav class="pagination">
-    <a href="javascript:;" class="pagination-item" @click="goFirst()" v-if="pageNumber > 1">首页</a>
-    <a href="javascript:;" class="pagination-item" @click="goPrev()" v-if="pageNumber > 1">前一页</a>
+    <a href="javascript:;" class="pagination-item first" @click="goFirst()" v-if="pageNumber > 1">{{info.firstInfo}}</a>
+    <a href="javascript:;" class="pagination-item prev" @click="goPrev()" v-if="pageNumber > 1">{{info.prevInfo}}</a>
     <ul class="pagination-list" v-if="ellipsis">
       <li class="pagination-item" @click="goFirst()" v-if="pageNumber > 1">1</li>
-      <li class="pagination-item" v-if="pageNumber - (max + 1) > 1">...</li>
+      <li class="pagination-item ellipsis" v-if="pageNumber - (max + 1) > 1">...</li>
       <li class="pagination-item"
           @click="goPage(pageNumber - pageIndex)"
           v-if="pageNumber - pageIndex > 1"
@@ -20,7 +20,7 @@
           :key="pageNumber + pageIndex">
         {{pageNumber + pageIndex}}
       </li>
-      <li class="pagination-item" v-if="pageNumber + max + 1 < pageCount">...</li>
+      <li class="pagination-item ellipsis" v-if="pageNumber + max + 1 < pageCount">...</li>
       <li class="pagination-item" @click="goLast()" v-if="pageNumber < pageCount">{{pageCount}}</li>
     </ul>
     <ul class="pagination-list" v-if="!ellipsis">
@@ -46,14 +46,14 @@
         {{pageIndex}}
       </li>
     </ul>
-    <a href="javascript:;" class="pagination-item" @click="goNext()" v-if="pageNumber < pageCount">后一页</a>
-    <a href="javascript:;" class="pagination-item" @click="goLast()" v-if="pageNumber < pageCount">尾页</a>
+    <a href="javascript:;" class="pagination-item next" @click="goNext()" v-if="pageNumber < pageCount">{{info.nextInfo}}</a>
+    <a href="javascript:;" class="pagination-item last" @click="goLast()" v-if="pageNumber < pageCount">{{info.lastInfo}}</a>
   </nav>
 </template>
 
 <script>
 export default {
-  name: 'vue-wheels-pagination',
+  name: 'VueWheelsPagination',
   props: {
     count: {
       type: Number,
@@ -77,11 +77,26 @@ export default {
       type: Boolean,
       required: false,
       default: true
+    },
+    info: {
+      type: Object,
+      required: false,
+      default: {
+        firstInfo: '首页',
+        prevInfo: '前一页',
+        nextInfo: '后一页',
+        lastInfo: '尾页'
+      }
     }
   },
   data () {
     return {
       pageNumber: this.curr
+    }
+  },
+  watch: {
+    curr (newVal) {
+      this.pageNumber = newVal
     }
   },
   computed: {
@@ -131,15 +146,15 @@ export default {
     },
     goPage (pageNumber) {
       this.pageNumber = pageNumber
-      this.$emit('pageChange', pageNumber)
+      this.$emit('pageChange', this.pageNumber)
     },
     goNext () {
-      this.pageNumber = this.pageNumber + 1
+      this.pageNumber++
       this.$emit('pageChange', this.pageNumber)
     },
     goLast () {
       this.pageNumber = this.pageCount
-      this.$emit('pageChange', this.pageCount)
+      this.$emit('pageChange', this.pageNumber)
     }
   }
 }

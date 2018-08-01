@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import App from './App.vue'
-import Pagination from './index.js' //使用本地的
-// import Pagination from 'vue-wheels' //插件的方式引入
+import { VueWheelsPagination } from './index.js' //使用本地的
+// import { VueWheelsPagination } from 'vue-wheels' //插件的方式引入
 
-Vue.use(Pagination)
+Vue.use(VueWheelsPagination)
 
 new Vue({
   el: '#app',

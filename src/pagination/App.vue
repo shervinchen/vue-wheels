@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="main">
-      <vue-wheels-pagination @pageChange="change" :count="count" :limit="limit"></vue-wheels-pagination>
+      <vue-wheels-pagination @pageChange="change" :count="count" :limit="limit" :info="info"></vue-wheels-pagination>
     </div>
   </div>
 </template>
@@ -12,7 +12,13 @@ export default {
   data () {
     return {
       count: 162,
-      limit: 5
+      limit: 5,
+      info: {
+        firstInfo: '<<',
+        prevInfo: '<',
+        nextInfo: '>',
+        lastInfo: '>>'
+      }
     }
   },
   methods: {

@@ -9,9 +9,9 @@ module.exports = {
   // 入口文件
   entry: {
     // 测试入口
-    pagination: './src/pagination/main.js'
+    // pagination: './src/pagination/main.js'
     // 发布入口
-    // pagination: './src/pagination/index.js'
+    pagination: './src/pagination/index.js'
   },
   // 出口文件
   output: {
