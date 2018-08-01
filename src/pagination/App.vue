@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="main">
-      <vue-wheels-pagination @pageChange="change" :pageOption="pageOption"></vue-wheels-pagination>
+      <vue-wheels-pagination @pageChange="change" :count="count" :limit="limit"></vue-wheels-pagination>
     </div>
   </div>
 </template>
@@ -11,23 +11,14 @@ export default {
   name: 'app',
   data () {
     return {
-      pageOption: {
-        curr: 1,
-        count: 162,
-        limit: 5,
-        ellipsis: true,
-        max: 2
-      }
+      count: 162,
+      limit: 5
     }
   },
   methods: {
     change (pageNumber) {
       console.log(pageNumber)
     }
-  },
-  mounted () {
-    // 显示省略号
-    // new Pagination('#pagelist1', );
   }
 }
 </script>

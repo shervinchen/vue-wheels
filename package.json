@@ -1,6 +1,6 @@
 {
   "name": "vue-wheels",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "some wheels made by vue",
   "main": "dist/vue-wheels.js",
   "scripts": {

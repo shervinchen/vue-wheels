@@ -1,38 +1,53 @@
 <template lang="html">
   <nav class="pagination">
-    <li class="pagination-item" @click="goFirst()" v-if="pageNumber > 1">
-      <a href="javascript:;" class="pagination-link">首页</a>
-    </li>
-    <li class="pagination-item" @click="goPrev()" v-if="pageNumber > 1">
-      <a href="javascript:;" class="pagination-link">前一页</a>
-    </li>
-    <li class="pagination-item" @click="goFirst()" v-if="pageNumber > 1">
-      <a href="javascript:;" class="pagination-link">1</a>
-    </li>
-    <li class="pagination-item" v-if="pageNumber - (pageOption.max + 1) > 1">
-      <a href="javascript:;" class="pagination-link">...</a>
-    </li>
-    <li class="pagination-item" @click="goPage(pageNumber - pageIndex)" v-if="pageNumber - pageIndex > 1" v-for="pageIndex in rPageData" :key="pageNumber - pageIndex">
-      <a href="javascript:;" class="pagination-link">{{pageNumber - pageIndex}}</a>
-    </li>
-    <li class="pagination-item" @click="goPage(pageNumber)">
-      <a href="javascript:;" class="pagination-link current">{{pageNumber}}</a>
-    </li>
-    <li class="pagination-item" @click="goPage(pageNumber + pageIndex)" v-if="pageNumber + pageIndex < pageCount" v-for="pageIndex in pageData" :key="pageNumber + pageIndex">
-      <a href="javascript:;" class="pagination-link">{{pageNumber + pageIndex}}</a>
-    </li>
-    <li class="pagination-item" v-if="pageNumber + pageOption.max + 1 < pageCount">
-      <a href="javascript:;" class="pagination-link">...</a>
-    </li>
-    <li class="pagination-item" @click="goLast()" v-if="pageNumber < pageCount">
-      <a href="javascript:;" class="pagination-link">{{pageCount}}</a>
-    </li>
-    <li class="pagination-item" @click="goNext()" v-if="pageNumber < pageCount">
-      <a href="javascript:;" class="pagination-link">后一页</a>
-    </li>
-    <li class="pagination-item" @click="goLast()" v-if="pageNumber < pageCount">
-      <a href="javascript:;" class="pagination-link">尾页</a>
-    </li>
+    <a href="javascript:;" class="pagination-item" @click="goFirst()" v-if="pageNumber > 1">首页</a>
+    <a href="javascript:;" class="pagination-item" @click="goPrev()" v-if="pageNumber > 1">前一页</a>
+    <ul class="pagination-list" v-if="ellipsis">
+      <li class="pagination-item" @click="goFirst()" v-if="pageNumber > 1">1</li>
+      <li class="pagination-item" v-if="pageNumber - (max + 1) > 1">...</li>
+      <li class="pagination-item"
+          @click="goPage(pageNumber - pageIndex)"
+          v-if="pageNumber - pageIndex > 1"
+          v-for="pageIndex in rPageData"
+          :key="pageNumber - pageIndex">
+        {{pageNumber - pageIndex}}
+      </li>
+      <li class="pagination-item current" @click="goPage(pageNumber)">{{pageNumber}}</li>
+      <li class="pagination-item"
+          @click="goPage(pageNumber + pageIndex)"
+          v-if="pageNumber + pageIndex < pageCount"
+          v-for="pageIndex in pageData"
+          :key="pageNumber + pageIndex">
+        {{pageNumber + pageIndex}}
+      </li>
+      <li class="pagination-item" v-if="pageNumber + max + 1 < pageCount">...</li>
+      <li class="pagination-item" @click="goLast()" v-if="pageNumber < pageCount">{{pageCount}}</li>
+    </ul>
+    <ul class="pagination-list" v-if="!ellipsis">
+      <li :class="pageIndex === pageNumber ? 'pagination-item current' : 'pagination-item'"
+          @click="goPage(pageIndex)"
+          v-for="pageIndex in pageDataFront"
+          v-if="pageNumber < max + 1"
+          :key="pageIndex">
+        {{pageIndex}}
+      </li>
+      <li :class="pageIndex === pageNumber ? 'pagination-item current' : 'pagination-item'"
+          @click="goPage(pageIndex)"
+          v-for="pageIndex in pageDataCenter"
+          v-if="pageNumber > pageCount - max"
+          :key="pageIndex">
+        {{pageIndex}}
+      </li>
+      <li :class="pageIndex === pageNumber ? 'pagination-item current' : 'pagination-item'"
+          @click="goPage(pageIndex)"
+          v-for="pageIndex in pageDataBehind"
+          v-if="max + 1 <= pageNumber && pageNumber <= pageCount - max"
+          :key="pageIndex">
+        {{pageIndex}}
+      </li>
+    </ul>
+    <a href="javascript:;" class="pagination-item" @click="goNext()" v-if="pageNumber < pageCount">后一页</a>
+    <a href="javascript:;" class="pagination-item" @click="goLast()" v-if="pageNumber < pageCount">尾页</a>
   </nav>
 </template>
 
@@ -40,27 +55,39 @@
 export default {
   name: 'vue-wheels-pagination',
   props: {
-    pageOption: {
-      type: Object,
-      required: true,
-      default: {
-        curr: 1,
-        count: 0,
-        limit: 5,
-        ellipsis: true,
-        max: 2
-      }
+    count: {
+      type: Number,
+      required: true
+    },
+    limit: {
+      type: Number,
+      required: true
+    },
+    curr: {
+      type: Number,
+      required: false,
+      default: 1
+    },
+    max: {
+      type: Number,
+      required: false,
+      default: 2
+    },
+    ellipsis: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   data () {
     return {
-      pageNumber: this.pageOption.curr
+      pageNumber: this.curr
     }
   },
   computed: {
     pageData () {
       let pageData = []
-      for (let index = 1; index <= this.pageOption.max; index++) {
+      for (let index = 1; index <= this.max; index++) {
         pageData.push(index)
       }
       return pageData
@@ -68,8 +95,29 @@ export default {
     rPageData () {
       return this.pageData.slice(0).reverse()
     },
+    pageDataFront () {
+      let pageDataFront = []
+      for (let index = 1; index <= this.max * 2 + 1; index++) {
+        pageDataFront.push(index)
+      }
+      return pageDataFront
+    },
+    pageDataCenter () {
+      let pageDataCenter = []
+      for (let index = this.pageCount - this.max * 2; index <= this.pageCount; index++) {
+        pageDataCenter.push(index)
+      }
+      return pageDataCenter
+    },
+    pageDataBehind () {
+      let pageDataBehind = []
+      for (let index = this.pageNumber - this.max; index <= this.pageNumber + this.max; index++) {
+        pageDataBehind.push(index)
+      }
+      return pageDataBehind
+    },
     pageCount () {
-      return Math.ceil(this.pageOption.count / this.pageOption.limit)
+      return Math.ceil(this.count / this.limit)
     }
   },
   methods: {
@@ -102,31 +150,32 @@ export default {
   margin: 24px 0;
   text-align: center;
   font-size: 0;
+  .pagination-list {
+    display: inline-block;
+    vertical-align: middle;
+  }
   .pagination-item {
     display: inline-block;
     vertical-align: middle;
     margin: 0 4px;
-    .pagination-link {
-      box-sizing: content-box;
-      display: inline-block;
-      padding: 0 8px;
-      min-width: 20px;
-      height: 32px;
-      line-height: 32px;
-      border-radius: 16px;
-      font-size: 16px;
-      cursor: pointer;
-      &:link {
-        color: #555;
-      }
-      &:hover {
-        background-color: #eee;
-        color: #42b983;
-      }
-      &.current {
-        color: #42b983;
-        background-color: #eee;
-      }
+    box-sizing: content-box;
+    padding: 0 8px;
+    min-width: 20px;
+    height: 32px;
+    line-height: 32px;
+    border-radius: 16px;
+    font-size: 16px;
+    cursor: pointer;
+    &:link {
+      color: #555;
+    }
+    &:hover {
+      background-color: #eee;
+      color: #42b983;
+    }
+    &.current {
+      color: #42b983;
+      background-color: #eee;
     }
   }
 }

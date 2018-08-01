@@ -10,4 +10,4 @@ if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(Pagination)
 }
 
-export default Pagination
+export default { Pagination }
